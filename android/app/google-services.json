@@ -1,0 +1,91 @@
+{
+  "project_info": {
+    "project_number": "918410724639",
+    "firebase_url": "https://vpma-nagpur.firebaseio.com",
+    "project_id": "vpma-nagpur",
+    "storage_bucket": "vpma-nagpur.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:918410724639:android:fa4600025f92bfa9d59c2a",
+        "android_client_info": {
+          "package_name": "com.codeWizard.vpma_nagpur"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "918410724639-pobqnqu2uudkmmr44pu1383oddqg768r.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyASTIeghy-xkLnPPmwNqXvxtB7FfPnDcQ4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "918410724639-pobqnqu2uudkmmr44pu1383oddqg768r.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "918410724639-6h4q0rlkr3pgu55k8e6kuafbjmmvheb7.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.yhts.vpmanagpur"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:918410724639:android:b5167e3b802e18f0d59c2a",
+        "android_client_info": {
+          "package_name": "com.yhts.vpmanagpur"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "918410724639-86soobmovqs6nbmc8schaggje4rsd37l.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.yhts.vpmanagpur",
+            "certificate_hash": "9c88ff7c91e5c48737e184f1cc9187a87f51b1e1"
+          }
+        },
+        {
+          "client_id": "918410724639-pobqnqu2uudkmmr44pu1383oddqg768r.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyASTIeghy-xkLnPPmwNqXvxtB7FfPnDcQ4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "918410724639-pobqnqu2uudkmmr44pu1383oddqg768r.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "918410724639-6h4q0rlkr3pgu55k8e6kuafbjmmvheb7.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.yhts.vpmanagpur"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
