@@ -41,6 +41,16 @@ dependencies:
   firebase_core: ^2.15.0
   firebase_dart: ^1.0.11
   http: ^0.13.6
+  cloud_firestore: ^4.8.3
+  provider: ^6.0.5
+  carousel_slider: ^4.2.1
+  eva_icons_flutter: ^3.1.0
+  image_picker_web: ^3.0.0+1
+  ionicons: ^0.2.2
+  shared_preferences: ^2.2.0
+  font_awesome_flutter: ^10.5.0
+  staggered_grid_view_flutter: ^0.0.4
+  url_launcher: ^6.1.12
 
 dev_dependencies:
   flutter_test:

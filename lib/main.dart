@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:vpma_nagpur/screens/candidate_page/candidate_page.dart';
 import 'package:vpma_nagpur/screens/login/login_page.dart';
 import 'package:vpma_nagpur/utils/constants.dart';
 
@@ -31,7 +32,7 @@ class MyApp extends StatelessWidget {
         '/': (context) => LoginPage(
               isNotAdmin: true,
             ),
-        // '/member/': (context) => CandidatePage(),
+        '/member/': (context) => CandidatePage(),
         // '/admin/': (context) => AdminPage(),
         // '/admin/vpma-admin/': (context) => AdminPanel(),
       },

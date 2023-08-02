@@ -2,6 +2,7 @@
 
 import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
+import 'package:vpma_nagpur/models/database_manager.dart';
 import 'package:vpma_nagpur/models/nav_item_data.dart';
 import 'package:vpma_nagpur/models/uder_data.dart';
 import 'package:vpma_nagpur/utils/constants.dart';
@@ -25,7 +26,7 @@ class CollapsingNavbar extends StatefulWidget {
 
 class _CollapsingNavbarState extends State<CollapsingNavbar> {
   final Constants _constants = Constants.getReferenceObject;
-  // final DatabaseManager _dbRef = DatabaseManager.getDbReference;
+  final DatabaseManager _dbRef = DatabaseManager.getDbReference;
   double expandWidth = 250.0;
   int selectedTab = 0;
   UserData? _user;
@@ -79,38 +80,37 @@ class _CollapsingNavbarState extends State<CollapsingNavbar> {
                           ),
                           child: InkWell(
                             onTap: () {
-                              // _dbRef.signOut().then((value) {
-                              //   if (value) {
-                              //     if (widget.isAdmin) {
-                              //       Navigator.pop(context);
-                              //       Navigator.push(
-                              //         context,
-                              //         MaterialPageRoute(
-                              //           builder: (context) => Logout(
-                              //             isAdmin: widget.isAdmin,
-                              //           ),
-                              //         ),
-                              //       );
-                              //     } else {
-                              //       Navigator.pop(context);
-                              //       Navigator.push(
-                              //         context,
-                              //         MaterialPageRoute(
-                              //           builder: (context) => Logout(),
-                              //         ),
-                              //       );
-                              //     }
-                              //   } else {
-                              //     showFlushBar(
-                              //       context: context,
-                              //       title: 'Error signing out!!!',
-                              //       alertStyle: true,
-                              //       message:
-                              //           'Please wait for sometime or Try again',
-                              //     );
-                              //   }
-                              // }
-                              // );
+                              _dbRef.signOut().then((value) {
+                                if (value) {
+                                  if (widget.isAdmin) {
+                                    Navigator.pop(context);
+                                    // Navigator.push(
+                                    //   context,
+                                    //   MaterialPageRoute(
+                                    //     builder: (context) => Logout(
+                                    //       isAdmin: widget.isAdmin,
+                                    //     ),
+                                    //   ),
+                                    // );
+                                  } else {
+                                    Navigator.pop(context);
+                                    // Navigator.push(
+                                    //   context,
+                                    //   MaterialPageRoute(
+                                    //     builder: (context) => Logout(),
+                                    //   ),
+                                    // );
+                                  }
+                                } else {
+                                  showFlushBar(
+                                    context: context,
+                                    title: 'Error signing out!!!',
+                                    alertStyle: true,
+                                    message:
+                                        'Please wait for sometime or Try again',
+                                  );
+                                }
+                              });
                             },
                             child: const Icon(
                               Icons.logout_outlined,

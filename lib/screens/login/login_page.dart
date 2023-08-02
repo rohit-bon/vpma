@@ -5,9 +5,9 @@ import 'package:vpma_nagpur/utils/constants.dart';
 
 // ignore: must_be_immutable
 class LoginPage extends StatefulWidget {
-  bool isNotAdmin;
+  bool? isNotAdmin;
   LoginPage({Key? key, this.isNotAdmin = false}) : super(key: key) {
-    if (isNotAdmin) {
+    if (isNotAdmin!) {
       Constants.isAdmin = false;
     }
   }

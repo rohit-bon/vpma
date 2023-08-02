@@ -3,7 +3,7 @@ class NewsData {
   String? description;
   String? head;
   String? image;
-  String? published;
+  dynamic published;
 
   NewsData({this.id, this.description, this.head, this.image, this.published});
 

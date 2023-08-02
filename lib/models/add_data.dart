@@ -1,7 +1,7 @@
 class AdData {
   int? id;
   String? adURL;
-  String? published;
+  dynamic published;
   String? wideAdURL;
 
   AdData({this.id, this.adURL, this.published, this.wideAdURL});

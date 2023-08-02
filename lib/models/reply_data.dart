@@ -3,7 +3,7 @@ class ReplyData {
   String? query;
   String? queryDate;
   String? reply;
-  String? replyDate;
+  dynamic replyDate;
   bool? viewed;
 
   ReplyData(

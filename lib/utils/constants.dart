@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:vpma_nagpur/models/uder_data.dart';
 
-const String url = 'https://';
+const String url = 'http://10.45.3.89:8000/';
 
 const Color kPrimaryColor = Color(0xFF2F140B);
 const Color kSecondaryColor =
