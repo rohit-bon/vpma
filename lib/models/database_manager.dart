@@ -1,7 +1,6 @@
-// ignore_for_file: prefer_interpolation_to_compose_strings
+// ignore_for_String: prefer_interpolation_to_compose_strings
 
 import 'dart:convert';
-import 'dart:html' as html;
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -20,7 +19,7 @@ class DatabaseManager {
   dynamic _newsImageStorageReference;
   dynamic _eventsImageStorageReference;
   dynamic _newsStoreCollection;
-  dynamic _profileImageRef;
+  dynamic _proStringImageRef;
   dynamic _adStoreRef;
   static final DatabaseManager _object = new DatabaseManager();
 
@@ -29,7 +28,8 @@ class DatabaseManager {
       _newsImageStorageReference = FirebaseStorage.instance.ref('images/news/');
       _eventsImageStorageReference =
           FirebaseStorage.instance.ref('images/events/');
-      _profileImageRef = FirebaseStorage.instance.ref('images/profilePhoto/');
+      _proStringImageRef =
+          FirebaseStorage.instance.ref('images/proStringPhoto/');
       _adStoreRef = FirebaseStorage.instance.ref('images/ads/');
     } else {
       Firebase.initializeApp(
@@ -44,8 +44,8 @@ class DatabaseManager {
       ));
       _newsImageStorageReference =
           FirebaseStorage.instance.ref().child('images/news');
-      _profileImageRef =
-          FirebaseStorage.instance.ref().child('images/profilePhoto/');
+      _proStringImageRef =
+          FirebaseStorage.instance.ref().child('images/proStringPhoto/');
       _adStoreRef = FirebaseStorage.instance.ref().child('images/ads/');
       _eventsImageStorageReference =
           FirebaseStorage.instance.ref().child('images/events/');
@@ -54,26 +54,26 @@ class DatabaseManager {
   }
   static DatabaseManager get getDbReference => _object;
 
-  Future uploadProfileImage(String uID, html.File image,
+  Future uploadProStringImage(String uID, String image,
       {bool isSelf = false}) async {
     String? imageExtension;
     try {
-      await _profileImageRef.child('$uID.png').delete();
+      await _proStringImageRef.child('$uID.png').delete();
     } catch (e) {
       try {
-        await _profileImageRef.child('$uID.PNG').delete();
+        await _proStringImageRef.child('$uID.PNG').delete();
       } catch (e) {
         try {
-          await _profileImageRef.child('$uID.jpg').delete();
+          await _proStringImageRef.child('$uID.jpg').delete();
         } catch (e) {
           try {
-            await _profileImageRef.child('$uID.JPG').delete();
+            await _proStringImageRef.child('$uID.JPG').delete();
           } catch (e) {
             try {
-              await _profileImageRef.child('$uID.JPEG').delete();
+              await _proStringImageRef.child('$uID.JPEG').delete();
             } catch (e) {
               try {
-                await _profileImageRef.child('$uID.jpeg').delete();
+                await _proStringImageRef.child('$uID.jpeg').delete();
               } catch (e) {
                 print(e);
               }
@@ -82,22 +82,24 @@ class DatabaseManager {
         }
       }
     }
-    if (image.name.contains('.png')) {
+    if (image.contains('.png')) {
       imageExtension = '.png';
-    } else if (image.name.contains('.PNG')) {
+    } else if (image.contains('.PNG')) {
       imageExtension = '.PNG';
-    } else if (image.name.contains('.jpg')) {
+    } else if (image.contains('.jpg')) {
       imageExtension = '.jpg';
-    } else if (image.name.contains('.JPG')) {
+    } else if (image.contains('.JPG')) {
       imageExtension = '.JPG';
-    } else if (image.name.contains('.jpeg')) {
+    } else if (image.contains('.jpeg')) {
       imageExtension = '.jpeg';
-    } else if (image.name.contains('.JPEG')) {
+    } else if (image.contains('.JPEG')) {
       imageExtension = '.JPEG';
     }
     try {
-      UploadTask uploadTask =
-          await _profileImageRef.child(uID + imageExtension!).put(image).future;
+      UploadTask uploadTask = await _proStringImageRef
+          .child(uID + imageExtension!)
+          .put(image)
+          .future;
       Uri imageURL = Uri.parse(await uploadTask.snapshot.ref.getDownloadURL());
 
       Future<UserData> futureUser = fetchCurrentUserData(uID);
@@ -134,35 +136,35 @@ class DatabaseManager {
     }
   }
 
-  Future uploadAds(html.File image, html.File imageA) async {
+  Future uploadAds(String image, String imageA) async {
     String? imageExtension;
     String? imageAExtension;
 
-    if (image.name.contains('.png')) {
+    if (image.contains('.png')) {
       imageExtension = '.png';
-    } else if (image.name.contains('.PNG')) {
+    } else if (image.contains('.PNG')) {
       imageExtension = '.PNG';
-    } else if (image.name.contains('.jpg')) {
+    } else if (image.contains('.jpg')) {
       imageExtension = '.jpg';
-    } else if (image.name.contains('.JPG')) {
+    } else if (image.contains('.JPG')) {
       imageExtension = '.JPG';
-    } else if (image.name.contains('.jpeg')) {
+    } else if (image.contains('.jpeg')) {
       imageExtension = '.jpeg';
-    } else if (image.name.contains('.JPEG')) {
+    } else if (image.contains('.JPEG')) {
       imageExtension = '.JPEG';
     }
 
-    if (imageA.name.contains('.png')) {
+    if (imageA.contains('.png')) {
       imageAExtension = '.png';
-    } else if (imageA.name.contains('.PNG')) {
+    } else if (imageA.contains('.PNG')) {
       imageAExtension = '.PNG';
-    } else if (imageA.name.contains('.jpg')) {
+    } else if (imageA.contains('.jpg')) {
       imageAExtension = '.jpg';
-    } else if (imageA.name.contains('.JPG')) {
+    } else if (imageA.contains('.JPG')) {
       imageAExtension = '.JPG';
-    } else if (imageA.name.contains('.jpeg')) {
+    } else if (imageA.contains('.jpeg')) {
       imageAExtension = '.jpeg';
-    } else if (imageA.name.contains('.JPEG')) {
+    } else if (imageA.contains('.JPEG')) {
       imageAExtension = '.JPEG';
     }
 
@@ -257,21 +259,21 @@ class DatabaseManager {
     }
   }
 
-  Future<bool> writeNews(NewsData data, bool isImage, html.File image) async {
+  Future<bool> writeNews(NewsData data, bool isImage, String image) async {
     String imageExtension;
 
     if (isImage) {
-      if (image.name.contains('.png')) {
+      if (image.contains('.png')) {
         imageExtension = '.png';
-      } else if (image.name.contains('.PNG')) {
+      } else if (image.contains('.PNG')) {
         imageExtension = '.PNG';
-      } else if (image.name.contains('.jpg')) {
+      } else if (image.contains('.jpg')) {
         imageExtension = '.jpg';
-      } else if (image.name.contains('.JPG')) {
+      } else if (image.contains('.JPG')) {
         imageExtension = '.JPG';
-      } else if (image.name.contains('.jpeg')) {
+      } else if (image.contains('.jpeg')) {
         imageExtension = '.jpeg';
-      } else if (image.name.contains('.JPEG')) {
+      } else if (image.contains('.JPEG')) {
         imageExtension = '.JPEG';
       }
       try {
@@ -372,17 +374,6 @@ class DatabaseManager {
     }
   }
 
-  Stream<List<NewsData>> getNews() {
-    Stream<List<NewsData>>? dataSnaps;
-    // Stream<List<NewsData>> dataSnaps = Firestore.instance
-    //     .collection('news')
-    //     .orderBy('published', descending: true)
-    //     .snapshots()
-    //     .map((snapShots) =>
-    //         snapShots.documents.map((doc) => NewsData.fromDoc(doc)).toList());
-    return dataSnaps!;
-  }
-
   Stream<List<EventsData>> getEvents() {
     Stream<List<EventsData>>? dataSnaps;
     // = Firestore.instance
@@ -393,7 +384,7 @@ class DatabaseManager {
     return dataSnaps!;
   }
 
-  Future<bool> writeEvent(EventsData _data, List<html.File> _images) async {
+  Future<bool> writeEvent(EventsData _data, String _images) async {
     //_eventsImageStorageReference
     String imageExtension;
     List<String> imagesLink = [];
@@ -409,18 +400,18 @@ class DatabaseManager {
     } else {
       _data.eventDate = DateTime.now() as String?;
       for (int i = 0; i < _images.length; i++) {
-        html.File image = _images[i];
-        if (image.name.contains('.png')) {
+        String image = _images[i];
+        if (image.contains('.png')) {
           imageExtension = '.png';
-        } else if (image.name.contains('.PNG')) {
+        } else if (image.contains('.PNG')) {
           imageExtension = '.PNG';
-        } else if (image.name.contains('.jpg')) {
+        } else if (image.contains('.jpg')) {
           imageExtension = '.jpg';
-        } else if (image.name.contains('.JPG')) {
+        } else if (image.contains('.JPG')) {
           imageExtension = '.JPG';
-        } else if (image.name.contains('.jpeg')) {
+        } else if (image.contains('.jpeg')) {
           imageExtension = '.jpeg';
-        } else if (image.name.contains('.JPEG')) {
+        } else if (image.contains('.JPEG')) {
           imageExtension = '.JPEG';
         }
         try {
@@ -661,22 +652,22 @@ class DatabaseManager {
       if (data.userImage != null) {
         String uID = data.id.toString();
         try {
-          await _profileImageRef.child(uID + '.png').delete();
+          await _proStringImageRef.child(uID + '.png').delete();
         } catch (e) {
           try {
-            await _profileImageRef.child(uID + '.PNG').delete();
+            await _proStringImageRef.child(uID + '.PNG').delete();
           } catch (e) {
             try {
-              await _profileImageRef.child(uID + '.jpg').delete();
+              await _proStringImageRef.child(uID + '.jpg').delete();
             } catch (e) {
               try {
-                await _profileImageRef.child(uID + '.JPG').delete();
+                await _proStringImageRef.child(uID + '.JPG').delete();
               } catch (e) {
                 try {
-                  await _profileImageRef.child(uID + '.JPEG').delete();
+                  await _proStringImageRef.child(uID + '.JPEG').delete();
                 } catch (e) {
                   try {
-                    await _profileImageRef.child(uID + '.jpeg').delete();
+                    await _proStringImageRef.child(uID + '.jpeg').delete();
                   } catch (e) {
                     print(e);
                   }

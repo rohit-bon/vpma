@@ -1,11 +1,13 @@
 // ignore_for_file: avoid_single_cascade_in_expression_statements, must_be_immutable, dead_code, use_build_context_synchronously, unused_field
 
+import 'dart:async';
 import 'dart:convert';
 import 'package:another_flushbar/flushbar.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vpma_nagpur/models/uder_data.dart';
+import 'package:vpma_nagpur/screens/candidate_page/candidate_page.dart';
 import 'package:vpma_nagpur/utils/constants.dart';
 
 class MobileLogin extends StatefulWidget {
@@ -51,9 +53,12 @@ class _MobileLoginState extends State<MobileLogin> {
     SharedPreferences? _cache = await SharedPreferences.getInstance();
     try {
       if (_cache.getBool('isLoggedIn')!) {
-        if (_cache.getBool('activeStatus')! && _cache.getBool('blacklisted')!) {
-          Navigator.popAndPushNamed(context, '/member/');
-        }
+        // if (_cache.getBool('activeStatus')! && _cache.getBool('blacklisted')!) {
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => SplashScreen()),
+            (route) => false);
+        // }
         return true;
       } else {
         return false;
@@ -291,6 +296,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       ElevatedButton(
                         style: ButtonStyle(
+                            backgroundColor:
+                                MaterialStateProperty.all(btnColor),
                             shape: MaterialStateProperty.all<
                                     RoundedRectangleBorder>(
                                 RoundedRectangleBorder(
@@ -360,8 +367,12 @@ class _LoginScreenState extends State<LoginScreen> {
                                       if (_const.user!.memberType! ==
                                           'normal') {
                                         resetButtonAppearence();
-                                        Navigator.popAndPushNamed(
-                                            context, '/member/');
+                                        Navigator.pushAndRemoveUntil(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    MobileCandidate()),
+                                            (route) => false);
                                       } else {
                                         print('object');
                                         showFlushBar(
@@ -508,5 +519,89 @@ class _LoginScreenState extends State<LoginScreen> {
     _cache.setString('userShopAddress', add);
     _cache.setString('userShopName', sname);
     _cache.setString('userImage', image);
+  }
+}
+
+class SplashScreen extends StatefulWidget {
+  @override
+  _SplashScreenState createState() => _SplashScreenState();
+}
+
+class _SplashScreenState extends State<SplashScreen> {
+  @override
+  void initState() {
+    super.initState();
+    Timer(
+        Duration(seconds: 3),
+        () => Navigator.of(context).pushReplacement(MaterialPageRoute(
+            builder: (BuildContext context) => MobileCandidate())));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        backgroundColor: Colors.white,
+        body: Container(
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Expanded(
+                  child: Center(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Image.asset(
+                          'assets/images/vpma_logo.png',
+                          height: (MediaQuery.of(context).size.width * 0.6),
+                          fit: BoxFit.fitHeight,
+                        ),
+                        const SizedBox(
+                          width: 10.0,
+                        ),
+                        Text(
+                          'Vidarbha Plywood\nMerchant\'s Association  ',
+                          textAlign: TextAlign.center,
+                          style: kAppTitleStyle.copyWith(
+                              fontSize: 32.0, fontFamily: 'ProductSans'),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Image.asset(
+                        'assets/images/yhts.png',
+                        height: 50,
+                        fit: BoxFit.fitHeight,
+                      ),
+                      const Text(
+                        'Powered By',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const Text(
+                        'Yarsh Hybrid Technology Solutions',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ));
   }
 }

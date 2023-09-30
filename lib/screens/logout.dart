@@ -13,7 +13,7 @@ class Logout extends StatelessWidget {
       initialRoute: isAdmin ? '/admin/' : '/',
       routes: {
         '/': (context) => LoginPage(),
-        '/member/': (context) => CandidatePage(),
+        '/member/': (context) => MobileCandidate(),
         // '/admin/': (context) => AdminPage(),
         // '/admin/vpma-admin/': (context) => AdminPanel(),
       },

@@ -2,9 +2,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:vpma_nagpur/models/database_manager.dart';
-import 'package:vpma_nagpur/models/uder_data.dart';
+import 'package:vpma_nagpur/main.dart';
 import 'package:vpma_nagpur/screens/logout.dart';
 import 'package:vpma_nagpur/utils/components/image_selector.dart';
 import 'package:vpma_nagpur/utils/components/owner_widget.dart';
@@ -18,11 +18,6 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  final Constants _const = Constants.getReferenceObject;
-  UserData? _user;
-  final DatabaseManager _dbRef = DatabaseManager.getDbReference;
-  Image? newImage;
-
   TextEditingController? _nameController,
       _shopController,
       _shopAddController,
@@ -34,7 +29,6 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   void initState() {
-    _user = _const.user;
     _nameController = TextEditingController();
     _shopController = TextEditingController();
     _shopAddController = TextEditingController();
@@ -48,18 +42,18 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    _nameController!.text = _user!.memberName!;
-    _shopController!.text = _user!.shopName!;
-    _shopAddController!.text = _user!.shopAddress!;
-    _emailController!.text = _user!.email!;
-    _contactController!.text = _user!.contact!;
-    _renewalController!.text = _user!.renewalDate!;
-    _passController!.text = _user!.password!;
-    _gstController!.text = _user!.gstNo!;
+    _nameController!.text = nameGlobal!;
+    _shopController!.text = snameGlobal!;
+    _shopAddController!.text = addGlobal!;
+    _emailController!.text = emailGlobal!;
+    _contactController!.text = contactGlobal!;
+    _renewalController!.text = dateGlobal!;
+    _passController!.text = '************';
+    _gstController!.text = gstGlobal!;
     return Scaffold(
       backgroundColor: kThirdColor,
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(151),
+        preferredSize: const Size.fromHeight(151),
         child: Container(
           color: kPrimaryColor,
           child: SafeArea(
@@ -72,8 +66,8 @@ class _ProfilePageState extends State<ProfilePage> {
                   children: [
                     InkWell(
                       onTap: () => Navigator.pop(context),
-                      child: Padding(
-                        padding: const EdgeInsets.only(right: 10),
+                      child: const Padding(
+                        padding: EdgeInsets.only(right: 10),
                         child: Icon(
                           FontAwesomeIcons.arrowLeft,
                           color: Colors.white,
@@ -81,7 +75,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                     ),
                     OwnerWidget(),
-                    SizedBox(width: 20.0),
+                    const SizedBox(width: 20.0),
                   ],
                 ),
               ),
@@ -112,7 +106,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         width: 260,
                         child: Stack(
                           children: [
-                            getUserProfile(_user!.userImage!),
+                            getUserProfile(imageGlobal!),
                             Align(
                               alignment: Alignment.bottomRight,
                               child: Padding(
@@ -121,52 +115,52 @@ class _ProfilePageState extends State<ProfilePage> {
                                 child: FloatingActionButton(
                                   backgroundColor: kSecondaryColor,
                                   onPressed: () {
-                                    getImage().then((value) {
-                                      if (value.name.contains('.jpg') ||
-                                          value.name.contains('.JPG') ||
-                                          value.name.contains('.png') ||
-                                          value.name.contains('.PNG') ||
-                                          value.name.contains('.jpeg') ||
-                                          value.name.contains('.JPEG')) {
-                                        _dbRef
-                                            .uploadProfileImage(
-                                                _user!.id.toString(), value,
-                                                isSelf: true)
-                                            .then((value) {
-                                          if (!value) {
-                                            showFlushBar(
-                                              context: context,
-                                              title:
-                                                  'Problem occured while updating profile image!!!',
-                                              alertStyle: true,
-                                              message:
-                                                  'Please wait for some time or try again.',
-                                            );
-                                          } else {
-                                            setState(() {
-                                              _user!.userImage = value;
-                                            });
-                                            showFlushBar(
-                                              context: context,
-                                              title:
-                                                  'Member Profile Image Updated Successfully.',
-                                              message: 'Perfect',
-                                            );
-                                          }
-                                        });
-                                      } else {
-                                        showFlushBar(
-                                          context: context,
-                                          title:
-                                              'Image with invalid format selected!!!',
-                                          alertStyle: true,
-                                          message:
-                                              'Select a image with ".jpg" or ".png" format only and try again.',
-                                        );
-                                      }
-                                    });
+                                    // getImage().then((value) {
+                                    //   if (value.name.contains('.jpg') ||
+                                    //       value.name.contains('.JPG') ||
+                                    //       value.name.contains('.png') ||
+                                    //       value.name.contains('.PNG') ||
+                                    //       value.name.contains('.jpeg') ||
+                                    //       value.name.contains('.JPEG')) {
+                                    //     _dbRef
+                                    //         .uploadProfileImage(
+                                    //             _user!.id.toString(), value,
+                                    //             isSelf: true)
+                                    //         .then((value) {
+                                    //       if (!value) {
+                                    //         showFlushBar(
+                                    //           context: context,
+                                    //           title:
+                                    //               'Problem occured while updating profile image!!!',
+                                    //           alertStyle: true,
+                                    //           message:
+                                    //               'Please wait for some time or try again.',
+                                    //         );
+                                    //       } else {
+                                    //         setState(() {
+                                    //           _user!.userImage = value;
+                                    //         });
+                                    //         showFlushBar(
+                                    //           context: context,
+                                    //           title:
+                                    //               'Member Profile Image Updated Successfully.',
+                                    //           message: 'Perfect',
+                                    //         );
+                                    //       }
+                                    //     });
+                                    //   } else {
+                                    //     showFlushBar(
+                                    //       context: context,
+                                    //       title:
+                                    //           'Image with invalid format selected!!!',
+                                    //       alertStyle: true,
+                                    //       message:
+                                    //           'Select a image with ".jpg" or ".png" format only and try again.',
+                                    //     );
+                                    //   }
+                                    // });
                                   },
-                                  child: Icon(
+                                  child: const Icon(
                                     FontAwesomeIcons.edit,
                                     color: Colors.white,
                                   ),
@@ -176,29 +170,29 @@ class _ProfilePageState extends State<ProfilePage> {
                           ],
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 12.0,
                       ),
                       SizedBox(
                         width: double.maxFinite,
                         child: Text(
-                          _user!.memberName!,
+                          nameGlobal!,
                           maxLines: 4,
                           textAlign: TextAlign.center,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 40.0,
                           ),
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 10.0,
                       ),
                       Material(
                         elevation: 5.0,
                         borderRadius: BorderRadius.circular(30.0),
-                        color: _user!.activeStatus!
+                        color: activeStatusGlobal!
                             ? Colors.greenAccent[400]
-                            : (_user!.blacklisted!
+                            : (blacklistedGlobal!
                                 ? Colors.redAccent[400]
                                 : Colors.yellowAccent[400]),
                         child: Padding(
@@ -207,12 +201,12 @@ class _ProfilePageState extends State<ProfilePage> {
                             horizontal: 12.0,
                           ),
                           child: Text(
-                            (_user!.activeStatus!
+                            (activeStatusGlobal!
                                 ? '  ACTIVE  '
-                                : (_user!.blacklisted!
+                                : (blacklistedGlobal!
                                     ? '  BLACKLISTED  '
                                     : '  INACTIVE  ')),
-                            style: TextStyle(
+                            style: const TextStyle(
                                 fontSize: 18.0,
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold),
@@ -221,7 +215,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                     ],
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 30.0,
                   ),
                   infoTextField(
@@ -274,7 +268,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           controller: _renewalController!,
                         ),
                       ),
-                      Expanded(
+                      const Expanded(
                         child: SizedBox(),
                       ),
                     ],
@@ -283,36 +277,20 @@ class _ProfilePageState extends State<ProfilePage> {
                     padding: const EdgeInsets.all(5.0),
                     child: RawMaterialButton(
                       onPressed: () {
-                        _dbRef.signOut().then((value) {
-                          if (value) {
-                            Navigator.popUntil(
-                              context,
-                              ModalRoute.withName('/member/'),
-                            );
-                            Navigator.pop(context);
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => Logout(),
-                              ),
-                            );
-                          } else {
-                            showFlushBar(
-                              context: context,
-                              title: 'Error signing out!!!',
-                              alertStyle: true,
-                              message: 'Please wait for sometime or Try again',
-                            );
-                          }
-                        });
+                        logout();
+                        Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const Logout()),
+                            (route) => false);
                       },
                       elevation: 10.0,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10.0),
                       ),
                       fillColor: kSecondaryColor,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
+                      child: const Padding(
+                        padding: EdgeInsets.symmetric(
                           horizontal: 24.0,
                           vertical: 12.0,
                         ),
@@ -328,7 +306,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 10.0,
                   ),
                 ],
@@ -341,23 +319,23 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Widget getUserProfile(String userImage) {
-    if (userImage == null || userImage.toString() == 'null') {
-      return CircleAvatar(
-        backgroundColor: Colors.transparent,
-        radius: 130.0,
-        child: Icon(
-          Icons.account_circle,
-          color: Colors.blueGrey[100],
-          size: 255.0,
-        ),
-      );
-    } else {
-      return CircleAvatar(
-        backgroundColor: Colors.transparent,
-        radius: 130.0,
-        backgroundImage: NetworkImage(userImage),
-      );
-    }
+    // if (userImage == null || userImage.toString() == 'null') {
+    return CircleAvatar(
+      backgroundColor: Colors.transparent,
+      radius: 130.0,
+      child: Icon(
+        Icons.account_circle,
+        color: Colors.blueGrey[100],
+        size: 255.0,
+      ),
+    );
+    // } else {
+    //   return CircleAvatar(
+    //     backgroundColor: Colors.transparent,
+    //     radius: 130.0,
+    //     backgroundImage: NetworkImage(userImage),
+    //   );
+    // }
   }
 
   Widget infoTextField(
@@ -373,21 +351,21 @@ class _ProfilePageState extends State<ProfilePage> {
         enabled: false,
         decoration: InputDecoration(
           labelText: labelText,
-          labelStyle: TextStyle(
+          labelStyle: const TextStyle(
             color: kPrimaryColor,
           ),
           hintText: labelText,
           filled: true,
           disabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8.0),
-            borderSide: BorderSide(
+            borderSide: const BorderSide(
               color: Colors.transparent,
               width: 0.0,
             ),
           ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8.0),
-            borderSide: BorderSide(
+            borderSide: const BorderSide(
               color: Colors.blueGrey,
               width: 1.0,
             ),
@@ -405,4 +383,9 @@ class _ProfilePageState extends State<ProfilePage> {
       ),
     );
   }
+}
+
+logout() async {
+  SharedPreferences preferences = await SharedPreferences.getInstance();
+  await preferences.clear();
 }

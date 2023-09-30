@@ -1,11 +1,12 @@
-// ignore_for_file: unnecessary_null_comparison
+// ignore_for_file: unnecessary_null_comparison, must_be_immutable
+
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
-import 'package:provider/provider.dart';
-import 'package:vpma_nagpur/models/database_manager.dart';
-import 'package:vpma_nagpur/models/member_data.dart';
-import 'package:vpma_nagpur/screens/mobile_view/member_profile.dart';
+import 'package:http/http.dart' as http;
+import 'package:vpma_nagpur/models/uder_data.dart';
+import 'package:vpma_nagpur/screens/candidate_page/member_profile.dart';
 import 'package:vpma_nagpur/utils/constants.dart';
 
 class MembersFrag extends StatefulWidget {
@@ -15,21 +16,86 @@ class MembersFrag extends StatefulWidget {
   State<MembersFrag> createState() => _MembersFragState();
 }
 
+Future<List<UserData>> getNews() async {
+  final response = await http.get(Uri.parse('${url}memberDatabse/'));
+
+  if (response.statusCode == 200) {
+    final List body = json.decode(response.body);
+    return body.map((e) => UserData.fromJson(e)).toList();
+  } else {
+    throw Exception('Failed to load album');
+  }
+}
+
 class _MembersFragState extends State<MembersFrag> {
-  final DatabaseManager _dbRef = DatabaseManager.getDbReference;
   @override
   Widget build(BuildContext context) {
-    Stream<List<MemberData>> memberData = _dbRef.getMembers();
-    return StreamProvider<List<MemberData>>(
-      initialData: [],
-      create: (_) => memberData,
-      child: const MemberDataList(),
-    );
+    Future<List<UserData>> postsFuture = getNews();
+    return FutureBuilder<List<UserData>>(
+        future: postsFuture,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(
+                child: CircularProgressIndicator(
+              color: kPrimaryColor,
+            ));
+          } else if (snapshot.hasData) {
+            final posts = snapshot.data!;
+            return MemberDataList(
+              data: posts,
+            );
+          } else {
+            return const Text("No data available");
+          }
+        });
+  }
+}
+
+class ProductFrag extends StatefulWidget {
+  const ProductFrag({super.key});
+
+  @override
+  State<ProductFrag> createState() => _ProductFragState();
+}
+
+Future<List<ProductData>> getProduct() async {
+  final response = await http.get(Uri.parse('${url}productDatabse/'));
+
+  if (response.statusCode == 200) {
+    final List body = json.decode(response.body);
+    return body.map((e) => ProductData.fromJson(e)).toList();
+  } else {
+    throw Exception('Failed to load album');
+  }
+}
+
+class _ProductFragState extends State<ProductFrag> {
+  @override
+  Widget build(BuildContext context) {
+    Future<List<ProductData>> postsFuture = getProduct();
+    return FutureBuilder<List<ProductData>>(
+        future: postsFuture,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(
+                child: CircularProgressIndicator(
+              color: kPrimaryColor,
+            ));
+          } else if (snapshot.hasData) {
+            final posts = snapshot.data!;
+            return ProductDataList(
+              data: posts,
+            );
+          } else {
+            return const Text("No data available");
+          }
+        });
   }
 }
 
 class MemberDataList extends StatefulWidget {
-  const MemberDataList({super.key});
+  List<UserData>? data;
+  MemberDataList({super.key, this.data});
 
   @override
   State<MemberDataList> createState() => _MemberDataListState();
@@ -38,14 +104,40 @@ class MemberDataList extends StatefulWidget {
 class _MemberDataListState extends State<MemberDataList> {
   @override
   Widget build(BuildContext context) {
-    List<MemberData> _memberData = Provider.of<List<MemberData>>(context);
-    List<MemberData> _data = _memberData;
+    print('object');
+    print(widget.data!.isEmpty);
     return Container(
       color: kThirdColor,
       height: MediaQuery.of(context).size.height,
       width: MediaQuery.of(context).size.width,
-      child: (_data != null)
-          ? MemberBlock(data: _data)
+      child: (widget.data! != null)
+          ? MemberBlock(data: widget.data!)
+          : const Center(
+              child: CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation(kPrimaryColor),
+              ),
+            ),
+    );
+  }
+}
+
+class ProductDataList extends StatefulWidget {
+  List<ProductData>? data;
+  ProductDataList({super.key, this.data});
+
+  @override
+  State<ProductDataList> createState() => _ProductDataListState();
+}
+
+class _ProductDataListState extends State<ProductDataList> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: kThirdColor,
+      height: MediaQuery.of(context).size.height,
+      width: MediaQuery.of(context).size.width,
+      child: (widget.data! != null)
+          ? ProductBlock(data: widget.data!)
           : const Center(
               child: CircularProgressIndicator(
                 valueColor: AlwaysStoppedAnimation(kPrimaryColor),
@@ -56,7 +148,7 @@ class _MemberDataListState extends State<MemberDataList> {
 }
 
 class MemberBlock extends StatefulWidget {
-  final List<MemberData>? data;
+  final List<UserData>? data;
   const MemberBlock({super.key, this.data});
 
   @override
@@ -66,8 +158,8 @@ class MemberBlock extends StatefulWidget {
 class _MemberBlockState extends State<MemberBlock> {
   final TextEditingController _controller = TextEditingController();
   bool isTyping = false;
-  List<MemberData>? _data;
-  FocusNode _focus = FocusNode();
+  List<UserData>? _data;
+  final FocusNode _focus = FocusNode();
 
   @override
   void initState() {
@@ -76,6 +168,9 @@ class _MemberBlockState extends State<MemberBlock> {
   }
 
   Widget build(BuildContext context) {
+    _data = widget.data;
+    print('object');
+    print(widget.data!.isEmpty);
     return ListView(
       children: [
         Padding(
@@ -202,7 +297,7 @@ class _MemberBlockState extends State<MemberBlock> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              member.shopName!,
+                              member.shopName!.toString(),
                               style: const TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 24.0,
@@ -226,7 +321,7 @@ class _MemberBlockState extends State<MemberBlock> {
                               ownerNames: member.memberName,
                             ),
                             // Text(
-                            //   member.memberName,
+                            //   member.memberName!,
                             //   style: TextStyle(
                             //     fontSize: 18.0,
                             //     color: kThirdColor,
@@ -253,6 +348,143 @@ class _MemberBlockState extends State<MemberBlock> {
   }
 }
 
+class ProductBlock extends StatefulWidget {
+  List<ProductData>? data;
+  ProductBlock({super.key, this.data});
+
+  @override
+  State<ProductBlock> createState() => _ProductBlockState();
+}
+
+class _ProductBlockState extends State<ProductBlock> {
+  List<ProductData>? _data;
+  // final FocusNode _focus = FocusNode();
+
+  @override
+  void initState() {
+    _data = widget.data;
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    _data = widget.data;
+    return ListView(
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: SearchAnchor(
+              builder: (BuildContext context, SearchController controller) {
+            return SearchBar(
+              controller: controller,
+              padding: const MaterialStatePropertyAll<EdgeInsets>(
+                  EdgeInsets.symmetric(horizontal: 16.0)),
+              onTap: () {
+                controller.openView();
+              },
+              onChanged: (_) {
+                controller.openView();
+              },
+              leading: const Icon(Icons.search),
+            );
+          }, suggestionsBuilder:
+                  (BuildContext context, SearchController controller) {
+            return List<ListTile>.generate(5, (int index) {
+              final String item = 'item $index';
+              return ListTile(
+                title: Text(item),
+                onTap: () {
+                  setState(() {
+                    controller.closeView(item);
+                  });
+                },
+              );
+            });
+          }),
+        ),
+        Column(
+          children: _data!
+              .map(
+                (member) => Container(
+                  width: MediaQuery.of(context).size.width,
+                  padding: const EdgeInsets.all(15.0),
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ProductInfo(
+                            data: member,
+                          ),
+                        ),
+                      );
+                    },
+                    child: Material(
+                      borderRadius: BorderRadius.circular(
+                        4.0,
+                      ),
+                      color: kPrimaryColor,
+                      elevation: 6.0,
+                      child: Container(
+                        width: double.maxFinite,
+                        padding: const EdgeInsets.all(
+                          10.0,
+                        ),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Image.network(
+                              member.productImage!.toString(),
+                              width: double.maxFinite,
+                              fit: BoxFit.fitWidth,
+                            ),
+                            Text(
+                              member.productName!.toString(),
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 24.0,
+                                color: kThirdColor,
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 5.0,
+                            ),
+                            Text(
+                              member.productSpec!,
+                              style: const TextStyle(
+                                fontSize: 18.0,
+                                color: kThirdColor,
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 5.0,
+                            ),
+                            ShopOwnerList(
+                              ownerNames: member.sellers,
+                            ),
+                            // Text(
+                            //   member.memberName!,
+                            //   style: TextStyle(
+                            //     fontSize: 18.0,
+                            //     color: kThirdColor,
+                            //   ),
+                            // ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              )
+              .toList(),
+        ),
+      ],
+    );
+  }
+}
+
 class ShopOwnerList extends StatelessWidget {
   final String? ownerNames;
   const ShopOwnerList({super.key, this.ownerNames});
@@ -260,6 +492,7 @@ class ShopOwnerList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<String> _names = ownerNames!.split(',');
+
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: _names

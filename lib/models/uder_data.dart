@@ -64,3 +64,49 @@ class UserData {
     return data;
   }
 }
+
+class ProductData {
+  int? id;
+  String? productName;
+  String? productSpec;
+  String? sellers;
+  String? productImage;
+  String? sellerContacts;
+  String? sellerAddress;
+  String? shopName;
+
+  ProductData(
+      {this.id,
+      this.productName,
+      this.productSpec,
+      this.sellers,
+      this.productImage,
+      this.sellerContacts,
+      this.sellerAddress,
+      this.shopName});
+
+  ProductData.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    productName = json['productName'];
+    productSpec = json['productSpec'];
+    sellers = json['sellers'];
+    productImage = json['productImage'];
+    sellerContacts = json['sellerContacts'];
+    sellerAddress = json['sellerAddress'];
+    shopName = json['shopName'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['productName'] = this.productName;
+    data['productSpec'] = this.productSpec;
+    data['sellers'] = this.sellers;
+    data['productImage'] = this.productImage;
+    data['sellerContacts'] = this.sellerContacts;
+    data['sellerAddress'] = this.sellerAddress;
+    data['shopName'] = this.shopName;
+
+    return data;
+  }
+}

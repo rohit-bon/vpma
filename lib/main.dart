@@ -1,9 +1,45 @@
 import 'package:flutter/material.dart';
-import 'package:vpma_nagpur/screens/candidate_page/candidate_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vpma_nagpur/screens/login/login_page.dart';
 import 'package:vpma_nagpur/utils/constants.dart';
 
-void main() {
+bool? loggedInGlobal;
+bool? activeStatusGlobal;
+bool? blacklistedGlobal;
+String? uIDGlobal;
+String? emailGlobal;
+String? passwordGlobal;
+String? contactGlobal;
+String? gstGlobal;
+String? nameGlobal;
+String? typeGlobal;
+String? dateGlobal;
+String? addGlobal;
+String? snameGlobal;
+String? imageGlobal;
+Future<bool> getCache() async {
+  SharedPreferences _cache = await SharedPreferences.getInstance();
+
+  loggedInGlobal = _cache.getBool('isLoggedIn');
+  activeStatusGlobal = _cache.getBool('activeStatus');
+  blacklistedGlobal = _cache.getBool('blacklisted');
+  uIDGlobal = _cache.getString('userID');
+  emailGlobal = _cache.getString('userEmail');
+  passwordGlobal = _cache.getString('userPassword');
+  contactGlobal = _cache.getString('userCOntact');
+  gstGlobal = _cache.getString('userGstNo');
+  nameGlobal = _cache.getString('userName');
+  typeGlobal = _cache.getString('userType');
+  dateGlobal = _cache.getString('userRenewalDate');
+  addGlobal = _cache.getString('userShopAddress');
+  snameGlobal = _cache.getString('userShopName');
+  imageGlobal = _cache.getString('userImage');
+  print(uIDGlobal);
+
+  return true;
+}
+
+void main() async {
   runApp(const MyApp());
 }
 
@@ -12,6 +48,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    getCache();
     return MaterialApp(
       title: 'Vidarbha Plywood Merchant\'s Association',
       theme: ThemeData(
@@ -27,15 +64,9 @@ class MyApp extends StatelessWidget {
         ),
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      initialRoute: '/',
-      routes: {
-        '/': (context) => LoginPage(
-              isNotAdmin: true,
-            ),
-        '/member/': (context) => CandidatePage(),
-        // '/admin/': (context) => AdminPage(),
-        // '/admin/vpma-admin/': (context) => AdminPanel(),
-      },
+      home: LoginPage(
+        isNotAdmin: true,
+      ),
     );
   }
 }

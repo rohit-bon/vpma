@@ -143,9 +143,18 @@ class _CollapsingNavbarState extends State<CollapsingNavbar> {
           ),
         );
       } else {
-        return CircleAvatar(
+        // return CircleAvatar(
+        //   backgroundColor: Colors.transparent,
+        //   backgroundImage: NetworkImage(_user!.userImage!),
+        // );
+        return const CircleAvatar(
           backgroundColor: Colors.transparent,
-          backgroundImage: NetworkImage(_user!.userImage!),
+          radius: 20.0,
+          child: Icon(
+            Icons.account_circle,
+            color: Colors.white,
+            size: 38.0,
+          ),
         );
       }
     } catch (e) {

@@ -5,52 +5,14 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:vpma_nagpur/models/news_data.dart';
+import 'package:vpma_nagpur/screens/candidate_page/news_info_view.dart';
 import 'package:vpma_nagpur/utils/components/custom_container.dart';
 import 'package:vpma_nagpur/utils/constants.dart';
 
 var globalItemCount;
 
-class StackSlider extends StatefulWidget {
-  const StackSlider({super.key});
-
-  @override
-  State<StackSlider> createState() => _StackSliderState();
-}
-
 var cardAspectRatio = 12.0 / 16.0;
 var widgetAspectRatio = cardAspectRatio * 1.2;
-
-class _StackSliderState extends State<StackSlider> {
-  @override
-  Widget build(BuildContext context) {
-    List<NewsData> newsList = Provider.of<List<NewsData>>(context);
-    if (newsList != null) {
-      if (newsList.length == 0) {
-        return Container(
-          height: 500,
-          width: MediaQuery.of(context).size.width,
-          child: const Center(
-            child: Text(
-              'NONE YET!!!',
-              style: TextStyle(
-                fontFamily: 'Ubuntu',
-                fontSize: 22.0,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-        );
-      } else {
-        return OperationWidget(
-          newsList: newsList,
-          currentPage: newsList.length - 1,
-        );
-      }
-    } else {
-      return Container();
-    }
-  }
-}
 
 class OperationWidget extends StatefulWidget {
   List<NewsData>? newsList;
@@ -99,16 +61,16 @@ class _OperationWidgetState extends State<OperationWidget> {
                   itemBuilder: (context, index) {
                     return InkWell(
                       onTap: () {
-                        // Navigator.push(
-                        //   context,
-                        //   MaterialPageRoute(
-                        //     builder: (context) => NewsInfoView(
-                        //       data: widget.newsList[
-                        //           (widget.newsList.length - 1) -
-                        //               controller.page.round()],
-                        //     ),
-                        //   ),
-                        // );
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => NewsInfoView(
+                              data: widget.newsList![
+                                  (widget.newsList!.length - 1) -
+                                      controller!.page!.round()],
+                            ),
+                          ),
+                        );
                       },
                       child: Container(
                           constraints: const BoxConstraints.expand(),

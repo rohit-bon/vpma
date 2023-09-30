@@ -3,23 +3,24 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:vpma_nagpur/main.dart';
 import 'package:vpma_nagpur/models/database_manager.dart';
 import 'package:vpma_nagpur/models/query_data.dart';
 import 'package:vpma_nagpur/models/uder_data.dart';
-import 'package:vpma_nagpur/screens/mobile_view/back_appbar.dart';
+import 'package:vpma_nagpur/screens/candidate_page/back_appbar.dart';
 import 'package:vpma_nagpur/utils/components/image_selector.dart';
 import 'package:vpma_nagpur/utils/constants.dart';
 
 class NewQuery extends StatelessWidget {
   TextEditingController? _controller;
-  Constants? _const;
-  UserData? _user;
-  DatabaseManager? _dbRef;
+  // Constants? _const;
+  // userData? _user;
+  // DatabaseManager? _dbRef;
   NewQuery({Key? key}) : super(key: key) {
     _controller = TextEditingController();
-    _dbRef = DatabaseManager.getDbReference;
-    _const = Constants.getReferenceObject;
-    _user = _const!.user;
+    // _dbRef = DatabaseManager.getDbReference;
+    // _const = Constants.getReferenceObject;
+    // _user = _const!.user;
   }
 
   @override
@@ -88,33 +89,33 @@ class NewQuery extends StatelessWidget {
                 ),
                 fillColor: kPrimaryColor,
                 onPressed: () async {
-                  if (_controller!.text != '') {
-                    QueryData _data = QueryData(
-                      memberContact: _user!.contact,
-                      memberEmail: _user!.email,
-                      memberName: _user!.memberName,
-                      memberID: _user!.id.toString(),
-                      msgDate: FieldValue.serverTimestamp().toString(),
-                      query: _controller!.text,
-                    );
-                    _dbRef!.sendQuery(_data).then((value) {
-                      if (value) {
-                        Navigator.pop(context);
-                        showFlushBar(
-                          context: context,
-                          title: 'Query Sent.',
-                          message: 'Great',
-                        );
-                      } else {
-                        showFlushBar(
-                          context: context,
-                          title: 'Error occured while sending query!!!',
-                          message: 'Please wait for sometime or Try again',
-                          alertStyle: true,
-                        );
-                      }
-                    });
-                  }
+                  // if (_controller!.text != '') {
+                  //   queryData _data = queryData(
+                  //     memberContact: _user!.userContact,
+                  //     memberEmail: _user!.email,
+                  //     memberName: _user!.userName,
+                  //     memberID: _user!.userID.toString(),
+                  //     msgDate: FieldValue.serverTimestamp().toString(),
+                  //     query: _controller!.text,
+                  //   );
+                  //   _dbRef!.sendQuery(_data).then((value) {
+                  //     if (value) {
+                  //       Navigator.pop(context);
+                  //       showFlushBar(
+                  //         context: context,
+                  //         title: 'Query Sent.',
+                  //         message: 'Great',
+                  //       );
+                  //     } else {
+                  //       showFlushBar(
+                  //         context: context,
+                  //         title: 'Error occured while sending query!!!',
+                  //         message: 'Please wait for sometime or Try again',
+                  //         alertStyle: true,
+                  //       );
+                  //     }
+                  //   });
+                  // }
                 },
                 child: const Padding(
                   padding: EdgeInsets.symmetric(
@@ -152,21 +153,21 @@ class NewQuery extends StatelessWidget {
   }
 
   Widget getUserProfileIcon() {
-    if (_user!.userImage.toString() == 'null') {
-      return const CircleAvatar(
-        backgroundColor: Colors.transparent,
-        radius: 20.0,
-        child: Icon(
-          Icons.account_circle,
-          color: Colors.white,
-          size: 38.0,
-        ),
-      );
-    } else {
-      return CircleAvatar(
-        backgroundColor: Colors.transparent,
-        backgroundImage: NetworkImage(_user!.userImage!),
-      );
-    }
+    // if (imageGlobal.toString() == 'null') {
+    return const CircleAvatar(
+      backgroundColor: Colors.transparent,
+      radius: 20.0,
+      child: Icon(
+        Icons.account_circle,
+        color: Colors.white,
+        size: 38.0,
+      ),
+    );
+    // } else {
+    //   return CircleAvatar(
+    //     backgroundColor: Colors.transparent,
+    //     backgroundImage: NetworkImage(imageGlobal!),
+    //   );
+    // }
   }
 }

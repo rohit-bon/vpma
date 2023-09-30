@@ -1,15 +1,14 @@
 // ignore_for_file: no_leading_underscores_for_local_identifiers
 
-import 'dart:html' as html;
 import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker_web/image_picker_web.dart';
+// import 'package:image_picker_web/image_picker_web.dart';
 
-Future<html.File> getImage() async {
-  html.File? _image = await ImagePickerWeb.getImageAsFile();
-  print(_image!.relativePath);
-  return _image;
-}
+// Future<html.File> getImage() async {
+//   // html.File? _image = await ImagePickerWeb.getImageAsFile();
+//   // print(_image!.relativePath);
+//   // return _image;
+// }
 
 void showFlushBar(
     {String? title,
